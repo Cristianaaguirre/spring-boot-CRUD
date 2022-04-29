@@ -6,21 +6,23 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
 @Entity
 public class Student {
 
    @Id
    @GeneratedValue(generator = "uuid")
    @GenericGenerator(name = "uuid", strategy = "uuid2")
-   private String id;
-   @Column
-   private String name;
-   @Column
-   private String lastName;
-   @Column
-   private String email;
+   @Getter private String id;
+
+   @Column(nullable = false)
+   @Getter @Setter private String name;
+
+   @Column(nullable = false)
+   @Getter @Setter private String lastName;
+
+   @Column(nullable = false)
+   @Getter @Setter private String email;
+
    @ManyToOne
    @JoinColumn(name = "subject_id")
    private Subject subject;
