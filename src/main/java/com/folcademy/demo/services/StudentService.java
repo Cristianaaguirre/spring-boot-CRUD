@@ -1,6 +1,7 @@
 package com.folcademy.demo.services;
 
 import com.folcademy.demo.models.Student;
+
 import com.folcademy.demo.repositories.StudentRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class StudentService {
    @Transactional
    public @NotNull Student getStudent(String id) throws Exception {
       Optional<Student> aux = studentRepository.findById(id);
-      if(aux.isPresent())return aux.get();
-      else throw new Exception("OBJECT DON'T FOUND");
+      if(aux.isEmpty()) throw new Exception("OBJECT DON'T FOUND");
+      else return aux.get();
    }
 
    @Transactional
@@ -45,5 +46,14 @@ public class StudentService {
       Optional<Student> auxEmail = studentRepository.getByEmail(email);
       if(auxEmail.isPresent())return auxEmail.get();
       else throw new Exception("OBJECT DON'T FOUND");
+   }
+
+   @Transactional
+   public void putStudent(@NotNull Student auxStudent, String auxId) throws Exception {
+      Student student = getStudent(auxId);
+      student.setName(auxStudent.getName());
+      student.setLastName(auxStudent.getLastName());
+      student.setEmail(auxStudent.getEmail());
+      postStudent(student);
    }
 }

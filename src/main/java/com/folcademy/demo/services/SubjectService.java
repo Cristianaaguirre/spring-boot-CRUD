@@ -3,7 +3,10 @@ package com.folcademy.demo.services;
 import com.folcademy.demo.models.Subject;
 import com.folcademy.demo.repositories.SubjectRepository;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -12,8 +15,8 @@ import java.util.Optional;
 @Service
 public class SubjectService {
 
+   @Autowired
    private SubjectRepository subjectRepository;
-   private StudentService studentService;
 
    @Transactional
    public @NotNull Subject getSubject(String idSubject) {
@@ -33,8 +36,16 @@ public class SubjectService {
    }
 
    @Transactional
-   public void postSubject(Subject auxSubject) {
+   public void postSubject(@RequestBody Subject auxSubject) {
       if(auxSubject == null) throw new RuntimeException("NULL OBJECT");
       else subjectRepository.save(auxSubject);
+   }
+
+   @Transactional
+   public void putSubject(Subject auxSubject, String id) {
+      Subject subject = getSubject(id);
+      subject.setName(auxSubject.getName());
+      subject.setAddress(auxSubject.getAddress());
+      postSubject(subject);
    }
 }

@@ -36,12 +36,8 @@ public class StudentController {
    }
 
    @PutMapping(path = "/put-student/{id}")
-   public void putStudent(@RequestBody @NotNull Student student, @PathVariable("id") String id) throws Exception {
-      Student auxStudent = studentService.getStudent(id);
-      auxStudent.setName(student.getName());
-      auxStudent.setLastName(student.getLastName());
-      auxStudent.setEmail(student.getEmail());
-      studentService.postStudent(auxStudent);
+   public void putStudent(@RequestBody Student student, @PathVariable("id") String id) throws Exception {
+      studentService.putStudent(student, id);
    }
 
    //By personal Query
