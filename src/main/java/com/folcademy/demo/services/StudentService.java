@@ -17,30 +17,14 @@ public class StudentService {
    @Autowired
    private StudentRepository studentRepository;
 
+   //=================Gets=================//
+
    @Transactional
    public @NotNull Student getStudent(String id) throws Exception {
       Optional<Student> aux = studentRepository.findById(id);
       if(aux.isEmpty()) throw new Exception("OBJECT DON'T FOUND");
       else return aux.get();
    }
-
-   @Transactional
-   public void postStudent(Student aux) throws Exception {
-      if(aux == null) throw new Exception("OBJECT NULL");
-      studentRepository.save(aux);
-   }
-
-   @Transactional
-   public void deleteStudent(@NotNull String id) throws Exception {
-      if(id.trim().isEmpty()) throw new Exception("INVALID STRING");
-      studentRepository.deleteById(id);
-   }
-
-   @Transactional
-   public List<Student> getStudents() {
-      return studentRepository.findAll();
-   }
-
    @Transactional
    public Student getByEmail(String email) throws Exception {
       Optional<Student> auxEmail = studentRepository.getByEmail(email);
@@ -49,11 +33,36 @@ public class StudentService {
    }
 
    @Transactional
+   public List<Student> getStudents() {
+      return studentRepository.findAll();
+   }
+
+   //=================Post=================//
+
+
+   @Transactional
+   public void postStudent(Student aux) throws Exception {
+      if(aux == null) throw new Exception("OBJECT NULL");
+      studentRepository.save(aux);
+   }
+
+
+   //=================Puts y patches=================//
+
+   @Transactional
    public void putStudent(@NotNull Student auxStudent, String auxId) throws Exception {
       Student student = getStudent(auxId);
       student.setName(auxStudent.getName());
       student.setLastName(auxStudent.getLastName());
       student.setEmail(auxStudent.getEmail());
       postStudent(student);
+   }
+
+   //=================Deletes=================//
+
+   @Transactional
+   public void deleteStudent(@NotNull String id) throws Exception {
+      if(id.trim().isEmpty()) throw new Exception("INVALID STRING");
+      studentRepository.deleteById(id);
    }
 }
