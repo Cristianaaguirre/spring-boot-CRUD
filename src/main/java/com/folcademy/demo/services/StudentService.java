@@ -2,9 +2,7 @@ package com.folcademy.demo.services;
 
 import com.folcademy.demo.models.Student;
 
-
 import com.folcademy.demo.repositories.StudentRepository;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +17,23 @@ public class StudentService {
    @Autowired
    private StudentRepository studentRepository;
 
-   //=============Gets============//
    @Transactional
-   public @NotNull Student getStudent(String id) {
-      return studentRepository
-         .findById(id)
-         .orElseThrow(() -> new ResourceNotFoundException("Element don't found for this id: " + id));
+   public @NotNull Student getStudent(String id) throws Exception {
+      Optional<Student> aux = studentRepository.findById(id);
+      if(aux.isEmpty()) throw new Exception("OBJECT DON'T FOUND");
+      else return aux.get();
+   }
+
+   @Transactional
+   public void postStudent(Student aux) throws Exception {
+      if(aux == null) throw new Exception("OBJECT NULL");
+      studentRepository.save(aux);
+   }
+
+   @Transactional
+   public void deleteStudent(@NotNull String id) throws Exception {
+      if(id.trim().isEmpty()) throw new Exception("INVALID STRING");
+      studentRepository.deleteById(id);
    }
 
    @Transactional
@@ -39,15 +48,6 @@ public class StudentService {
       else throw new Exception("OBJECT DON'T FOUND");
    }
 
-
-   //=============Post===============//
-   @Transactional
-   public Student postStudent(Student aux) throws Exception {
-      if(aux == null) throw new Exception("OBJECT NULL");
-      return studentRepository.save(aux);
-   }
-
-   //=============Put y patch================//
    @Transactional
    public void putStudent(@NotNull Student auxStudent, String auxId) throws Exception {
       Student student = getStudent(auxId);
@@ -56,12 +56,4 @@ public class StudentService {
       student.setEmail(auxStudent.getEmail());
       postStudent(student);
    }
-
-
-   //===========Delete=============//
-   @Transactional
-   public void deleteStudent(@NotNull String id) {
-      studentRepository.deleteById(id);
-   }
-
 }

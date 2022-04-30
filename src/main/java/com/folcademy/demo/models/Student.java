@@ -1,6 +1,5 @@
 package com.folcademy.demo.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -8,26 +7,25 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
 public class Student {
 
    @Id
    @GeneratedValue(generator = "uuid")
    @GenericGenerator(name = "uuid", strategy = "uuid2")
-   private String id;
+   @Getter private String id;
 
    @Column(nullable = false)
-   private String name;
+   @Getter @Setter private String name;
 
    @Column(nullable = false)
-   private String lastName;
+   @Getter @Setter private String lastName;
 
    @Column(nullable = false)
-   private String email;
+   @Getter @Setter private String email;
 
-   @JsonIgnore
-   @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-   private School school;
+   @ManyToOne
+   @JoinColumn(name = "subject_id")
+   private Subject subject;
 
    public Student() {
    }
