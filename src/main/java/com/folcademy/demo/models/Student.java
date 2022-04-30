@@ -23,9 +23,9 @@ public class Student {
    @Column(nullable = false)
    @Getter @Setter private String email;
 
-   @ManyToOne
-   @JoinColumn(name = "subject_id")
-   private Subject subject;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REFRESH})
+   @JoinColumn(name = "subject")
+   @Getter @Setter private Subject subject;
 
    public Student() {
    }

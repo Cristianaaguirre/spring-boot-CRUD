@@ -13,13 +13,17 @@ public class Subject {
    @Id
    @GeneratedValue(generator = "uuid")
    @GenericGenerator(name = "uuid", strategy = "uuid2")
-   private String id;
+   @Getter private String id;
+
    @Column(nullable = false)
    @Getter @Setter private String name;
+
    @Column(nullable = false)
    @Getter @Setter private String address;
-   @OneToMany
-   private List<Student> studentList;
+
+   @Column(nullable = false)
+   @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REFRESH})
+   @Getter @Setter private List<Student> studentList;
 
    public Subject() {
    }

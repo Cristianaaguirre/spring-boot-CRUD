@@ -17,13 +17,6 @@ public class SubjectController {
    @Autowired
    private SubjectService subjectService;
 
-   @GetMapping(path = "/get-one-subject/{id}")
-   public ResponseEntity<Subject> getSubject(@PathVariable("id") String auxId) {
-      return ResponseEntity
-         .status(HttpStatus.OK)
-         .body(subjectService.getSubject(auxId));
-   }
-
    @GetMapping(path = "/get-all")
    public ResponseEntity<List<Subject>> getAll() {
       return ResponseEntity
@@ -31,19 +24,36 @@ public class SubjectController {
          .body(subjectService.getAllSubject());
    }
 
+   @GetMapping(path = "/get-one-subject/{id}")
+   public ResponseEntity<Subject> getSubject(@PathVariable("id") String auxId) {
+      return ResponseEntity
+         .status(HttpStatus.OK)
+         .body(subjectService.getSubject(auxId));
+   }
+
    @PostMapping(path = "/post-subject")
-   public void postSubject(@RequestBody Subject auxSubject){
-      subjectService.postSubject(auxSubject);
+   public ResponseEntity<Subject> postSubject(@RequestBody Subject auxSubject){
+      return ResponseEntity
+         .status(HttpStatus.CREATED)
+         .body(subjectService.postSubject(auxSubject));
    }
 
    @PutMapping(path = "/put-subject/{id}")
-   public void putSubject(@RequestBody Subject auxSubject, @PathVariable("id") String id) {
-      subjectService.putSubject(auxSubject,id);
+   public ResponseEntity<Subject> putSubject(@RequestBody Subject auxSubject, @PathVariable("id") String id) {
+      return ResponseEntity
+         .status(HttpStatus.CREATED)
+         .body(subjectService.putSubject(auxSubject,id));
+   }
+
+   @PatchMapping(path = "/add-student/{id-st}/{id-sb}")
+   public ResponseEntity<Subject> addStudent(@PathVariable("id-st") String idst, @PathVariable("id-sb") String idsb) throws Exception {
+      return ResponseEntity
+         .status(HttpStatus.OK)
+         .body(subjectService.patchStudent(idst, idsb));
    }
 
    @DeleteMapping(path = "/delete-subject/{id}")
    public void deleteSubject(@PathVariable("id") String id) {
       subjectService.deleteSubject(id);
    }
-
 }
