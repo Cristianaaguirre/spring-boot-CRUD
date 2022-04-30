@@ -49,8 +49,8 @@ public class SchoolController {
          .body(schoolService.putSchool(auxSchool,id));
    }
 
-   @PatchMapping(path = "/add-student/{id-st}/{id-sb}")
-   public ResponseEntity<School> addStudent(@PathVariable("id-st") String idst, @PathVariable("id-sb") String idsb) throws Exception {
+   @PatchMapping(path = "/add-student/student/{id-st}/school/{id-sch}")
+   public ResponseEntity<School> addStudent(@PathVariable("id-st") String idst, @PathVariable("id-sch") String idsb) throws Exception {
       return ResponseEntity
          .status(HttpStatus.OK)
          .body(schoolService.patchStudent(idst, idsb));

@@ -8,23 +8,25 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Subject {
+@Getter @Setter
+public class School {
 
    @Id
    @GeneratedValue(generator = "uuid")
    @GenericGenerator(name = "uuid", strategy = "uuid2")
    private String id;
    @Column(nullable = false)
-   @Getter @Setter private String name;
+   private String name;
    @Column(nullable = false)
-   @Getter @Setter private String address;
-   @OneToMany
+   private String address;
+
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private List<Student> studentList;
 
-   public Subject() {
+   public School() {
    }
-   public Subject(String id, String name, String address) {
-      this.id = id;
+
+   public School(String name, String address) {
       this.name = name;
       this.address = address;
    }
