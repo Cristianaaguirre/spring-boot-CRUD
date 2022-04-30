@@ -12,4 +12,5 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 
    @Query("select e from Student e where e.email = ?1")
    Optional<Student> getByEmail(String email);
+
 }
