@@ -37,9 +37,8 @@ public class SchoolService {
    //=================Post=================//
 
    @Transactional
-   public School postSchool(@RequestBody School auxSchool) {
-      if (auxSchool == null) throw new RuntimeException("NULL OBJECT");
-      else return schoolRepository.save(auxSchool);
+   public School postSchool(@RequestBody @NotNull School auxSchool) {
+      return schoolRepository.save(auxSchool);
    }
 
 
