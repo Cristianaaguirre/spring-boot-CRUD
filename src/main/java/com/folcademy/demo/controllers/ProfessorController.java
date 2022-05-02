@@ -32,7 +32,7 @@ public class ProfessorController {
    //=================Post=================//
 
    @PostMapping(path = "/post-professor")
-   public ResponseEntity<Professor> postPro(@RequestBody Professor aux) {
+   public ResponseEntity<?> postPro(@RequestBody Professor aux) {
       return ResponseEntity
          .status(HttpStatus.CREATED)
          .body(professorService.postProfessor(aux));
@@ -50,7 +50,7 @@ public class ProfessorController {
    //=================Deletes=================//
 
    @DeleteMapping(path = "/delete-professor/{id}")
-   public ResponseEntity<?> deletePro(@PathVariable("id") String id) {
+   public ResponseEntity<HttpStatus> deletePro(@PathVariable("id") String id) {
       professorService.deleteProfessor(id);
       return ResponseEntity.ok(HttpStatus.NO_CONTENT);
    }

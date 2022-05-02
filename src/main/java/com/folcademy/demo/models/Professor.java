@@ -1,7 +1,6 @@
 package com.folcademy.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -22,7 +21,6 @@ public class Professor {
    private String lastName;
 
    @JsonIgnore
-   @JsonIgnoreProperties
    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private School school;
 

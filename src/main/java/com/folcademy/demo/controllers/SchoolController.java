@@ -46,14 +46,14 @@ public class SchoolController {
    public ResponseEntity<School> putSchool(@RequestBody School auxSchool, @PathVariable("id") String id) {
       return ResponseEntity
          .status(HttpStatus.CREATED)
-         .body(schoolService.putSchool(auxSchool,id));
+         .body(schoolService.modifySchool(auxSchool,id));
    }
 
    @PatchMapping(path = "/add-student/student/{id-st}/school/{id-sch}")
    public ResponseEntity<School> addStudent(@PathVariable("id-st") String idst, @PathVariable("id-sch") String idsb) throws Exception {
       return ResponseEntity
          .status(HttpStatus.OK)
-         .body(schoolService.patchStudent(idst, idsb));
+         .body(schoolService.addStudent(idst, idsb));
    }
 
    @PatchMapping(path = "/remove-student/school/{id-sc}/student/{id-st}")
@@ -63,12 +63,26 @@ public class SchoolController {
          .body(schoolService.deleteStudent(idsc, idst));
    }
 
+   @PatchMapping(path = "/add-professor/professor-{id-pr}/school-{id-sch}")
+   public ResponseEntity<School> addProfessor(@PathVariable("id-pr") String idpr, @PathVariable("id-sch") String idsch) throws Exception {
+      return ResponseEntity
+         .status(HttpStatus.OK)
+         .body(schoolService.addProfessor(idpr, idsch));
+   }
+
+   @PatchMapping(path = "/remove-professor/professor-{id-pr}/school-{id-sch}")
+   public ResponseEntity<School> removeProfessor(@PathVariable("id-pr") String idpr, @PathVariable("id-sch") String idsch) throws Exception {
+      return ResponseEntity
+         .status(HttpStatus.NO_CONTENT)
+         .body(schoolService.deleteProfessor(idpr, idsch));
+   }
+
    //=================Delete=================//
 
    @DeleteMapping(path = "/delete-school/{id}")
-   public void deleteSubject(@PathVariable("id") String id) {
+   public ResponseEntity<HttpStatus> deleteSubject(@PathVariable("id") String id) {
       schoolService.deleteSchool(id);
+      return ResponseEntity.ok(HttpStatus.NO_CONTENT);
    }
-
 
 }

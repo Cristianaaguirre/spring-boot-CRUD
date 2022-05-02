@@ -1,5 +1,6 @@
 package com.folcademy.demo.services;
 
+import com.folcademy.demo.models.Professor;
 import com.folcademy.demo.models.Student;
 import com.folcademy.demo.models.School;
 import com.folcademy.demo.repositories.SchoolRepository;
@@ -19,6 +20,8 @@ public class SchoolService {
    private SchoolRepository schoolRepository;
    @Autowired
    private StudentService studentService;
+   @Autowired
+   private ProfessorService professorService;
 
    //=================Gets=================//
 
@@ -44,7 +47,7 @@ public class SchoolService {
 
    //=================Put y Patch=================//
    @Transactional
-   public School putSchool(@NotNull School auxSch, String id) {
+   public School modifySchool(@NotNull School auxSch, String id) {
       School school = getSchool(id);
       school.setName(auxSch.getName());
       school.setAddress(auxSch.getAddress());
@@ -52,15 +55,28 @@ public class SchoolService {
    }
 
    @Transactional
-   public School patchStudent(@NotNull String idSt, @NotNull String idSch) throws Exception {
-      School auxSch = getSchool(idSch);
+   public School addStudent(@NotNull String idSt, @NotNull String idSch) throws Exception {
       Student auxSt = studentService.getStudent(idSt);
       if (auxSt.getSchool() != null) throw new Exception("the student already has a school");
-      auxSch.getStudentList().add(auxSt);
-      auxSt.setSchool(auxSch);
-      studentService.postStudent(auxSt);
-      postSchool(auxSch);
-      return auxSch;
+      else {
+         School auxSch = getSchool(idSch);
+         auxSch.getStudentList().add(auxSt);
+         auxSt.setSchool(auxSch);
+         studentService.postStudent(auxSt);
+         return postSchool(auxSch);
+      }
+   }
+
+   public School addProfessor(@NotNull String idPr, @NotNull String idSch) throws Exception {
+      Professor auxPro = professorService.getProfessor(idPr);
+      if (auxPro.getSchool() != null) throw new Exception("the professor already has a school");
+      else {
+         School auxSch = getSchool(idSch);
+         auxSch.getProfessorList().add(auxPro);
+         auxPro.setSchool(auxSch);
+         professorService.postProfessor(auxPro);
+         return postSchool(auxSch);
+      }
    }
 
    //=================Delete=================//
@@ -72,11 +88,26 @@ public class SchoolService {
 
    @Transactional
    public School deleteStudent(String idSch, String idSt) throws Exception {
-      School auxSch = schoolRepository.getById(idSch);
       Student auxSt = studentService.getStudent(idSt);
-      auxSt.setSchool(null);
-      studentService.postStudent(auxSt);
-      auxSch.getStudentList().remove(studentService.getStudent(idSt));
-      return schoolRepository.save(auxSch);
+      if (auxSt.getSchool() == null) throw new Exception("the student don't have a school");
+      else {
+         School auxSch = schoolRepository.getById(idSch);
+         auxSch.getStudentList().remove(studentService.getStudent(idSt));
+         auxSt.setSchool(null);
+         studentService.postStudent(auxSt);
+         return schoolRepository.save(auxSch);
+      }
+   }
+
+   public School deleteProfessor(String idpr, String idSch) throws Exception {
+      Professor auxPr = professorService.getProfessor(idpr);
+      if (auxPr.getSchool() == null) throw new Exception("the professor don't have a school");
+      else {
+         School auxSch = schoolRepository.getById(idSch);
+         auxSch.getProfessorList().remove(auxPr);
+         auxPr.setSchool(null);
+         professorService.postProfessor(auxPr);
+         return schoolRepository.save(auxSch);
+      }
    }
 }
