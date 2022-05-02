@@ -67,6 +67,7 @@ public class SchoolService {
       }
    }
 
+   @Transactional
    public School addProfessor(@NotNull String idPr, @NotNull String idSch) throws Exception {
       Professor auxPro = professorService.getProfessor(idPr);
       if (auxPro.getSchool() != null) throw new Exception("the professor already has a school");
@@ -99,6 +100,7 @@ public class SchoolService {
       }
    }
 
+   @Transactional
    public School deleteProfessor(String idpr, String idSch) throws Exception {
       Professor auxPr = professorService.getProfessor(idpr);
       if (auxPr.getSchool() == null) throw new Exception("the professor don't have a school");
