@@ -23,7 +23,7 @@ public class ProfessorService {
 
    public @NotNull Professor getProfessor(String id) throws Exception {
       Optional<Professor> aux = professorRepository.findById(id);
-      if(aux.isEmpty()) throw new Exception("OBJECT DONT FOUND");
+      if(aux.isEmpty()) throw new Exception("DON'T FOUND");
       else return aux.get();
    }
 

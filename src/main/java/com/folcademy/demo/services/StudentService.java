@@ -22,14 +22,14 @@ public class StudentService {
    @Transactional
    public @NotNull Student getStudent(String id) throws Exception {
       Optional<Student> aux = studentRepository.findById(id);
-      if(aux.isEmpty()) throw new Exception("OBJECT DON'T FOUND");
+      if(aux.isEmpty()) throw new Exception("DON'T FOUND");
       else return aux.get();
    }
    @Transactional
    public Student getByEmail(String email) throws Exception {
       Optional<Student> auxEmail = studentRepository.getByEmail(email);
-      if(auxEmail.isPresent())return auxEmail.get();
-      else throw new Exception("OBJECT DON'T FOUND");
+      if(auxEmail.isEmpty())throw new Exception("DON'T FOUND");
+      else return auxEmail.get();
    }
 
    @Transactional

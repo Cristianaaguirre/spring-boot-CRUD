@@ -28,7 +28,7 @@ public class SchoolService {
    @Transactional
    public @NotNull School getSchool(String idSchool) {
       Optional<School> auxOptional = schoolRepository.findById(idSchool);
-      if (auxOptional.isEmpty()) throw new RuntimeException("OBJECT DON'T FOUND");
+      if (auxOptional.isEmpty()) throw new RuntimeException("DON'T FOUND");
       return auxOptional.get();
    }
 
