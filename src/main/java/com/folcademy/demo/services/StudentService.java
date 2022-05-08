@@ -1,7 +1,8 @@
 package com.folcademy.demo.services;
 
+import com.folcademy.demo.exceptions.MyException;
+import com.folcademy.demo.exceptions.ResourceNotFoundException;
 import com.folcademy.demo.models.Student;
-
 import com.folcademy.demo.repositories.StudentRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -20,16 +20,16 @@ public class StudentService {
    //=================Gets=================//
 
    @Transactional
-   public @NotNull Student getStudent(String id) throws Exception {
-      Optional<Student> aux = studentRepository.findById(id);
-      if(aux.isEmpty()) throw new Exception("DON'T FOUND");
-      else return aux.get();
+   public @NotNull Student getStudent(String id){
+      return studentRepository
+         .findById(id)
+         .orElseThrow(() -> new ResourceNotFoundException(id, "student"));
    }
    @Transactional
-   public Student getByEmail(String email) throws Exception {
-      Optional<Student> auxEmail = studentRepository.getByEmail(email);
-      if(auxEmail.isEmpty())throw new Exception("DON'T FOUND");
-      else return auxEmail.get();
+   public Student getByEmail(String email){
+      return studentRepository
+         .getByEmail(email)
+         .orElseThrow(() -> new ResourceNotFoundException("DON'T FOUND"));
    }
 
    @Transactional
@@ -41,8 +41,8 @@ public class StudentService {
 
 
    @Transactional
-   public void postStudent(Student aux) throws Exception {
-      if(aux == null) throw new Exception("OBJECT NULL");
+   public void postStudent(Student aux) throws MyException {
+      if(aux == null) throw new MyException("OBJECT NULL");
       studentRepository.save(aux);
    }
 
@@ -50,7 +50,7 @@ public class StudentService {
    //=================Puts y patches=================//
 
    @Transactional
-   public void putStudent(@NotNull Student auxStudent, String auxId) throws Exception {
+   public void putStudent(@NotNull Student auxStudent, String auxId) throws MyException {
       Student student = getStudent(auxId);
       student.setName(auxStudent.getName());
       student.setLastName(auxStudent.getLastName());

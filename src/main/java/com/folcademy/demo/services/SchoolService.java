@@ -1,9 +1,11 @@
 package com.folcademy.demo.services;
 
+import com.folcademy.demo.exceptions.MyException;
 import com.folcademy.demo.models.Professor;
-import com.folcademy.demo.models.Student;
 import com.folcademy.demo.models.School;
+import com.folcademy.demo.models.Student;
 import com.folcademy.demo.repositories.SchoolRepository;
+import com.folcademy.demo.exceptions.ResourceNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SchoolService {
@@ -26,10 +27,10 @@ public class SchoolService {
    //=================Gets=================//
 
    @Transactional
-   public @NotNull School getSchool(String idSchool) {
-      Optional<School> auxOptional = schoolRepository.findById(idSchool);
-      if (auxOptional.isEmpty()) throw new RuntimeException("DON'T FOUND");
-      return auxOptional.get();
+   public @NotNull School getSchool(String idSchool){
+      return schoolRepository
+         .findById(idSchool)
+         .orElseThrow(() -> new ResourceNotFoundException("School", idSchool));
    }
 
    @Transactional
@@ -55,9 +56,9 @@ public class SchoolService {
    }
 
    @Transactional
-   public School addStudent(@NotNull String idSt, @NotNull String idSch) throws Exception {
+   public School addStudent(@NotNull String idSt, @NotNull String idSch) throws MyException {
       Student auxSt = studentService.getStudent(idSt);
-      if (auxSt.getSchool() != null) throw new Exception("the student already has a school");
+      if (auxSt.getSchool() != null) throw new MyException("the student already has a school");
       else {
          School auxSch = getSchool(idSch);
          auxSch.getStudentList().add(auxSt);
@@ -68,9 +69,9 @@ public class SchoolService {
    }
 
    @Transactional
-   public School addProfessor(@NotNull String idPr, @NotNull String idSch) throws Exception {
+   public School addProfessor(@NotNull String idPr, @NotNull String idSch) throws MyException {
       Professor auxPro = professorService.getProfessor(idPr);
-      if (auxPro.getSchool() != null) throw new Exception("the professor already has a school");
+      if (auxPro.getSchool() != null) throw new MyException("the professor already has a school");
       else {
          School auxSch = getSchool(idSch);
          auxSch.getProfessorList().add(auxPro);
@@ -88,9 +89,9 @@ public class SchoolService {
    }
 
    @Transactional
-   public School deleteStudent(String idSch, String idSt) throws Exception {
+   public School deleteStudent(String idSch, String idSt) throws MyException {
       Student auxSt = studentService.getStudent(idSt);
-      if (auxSt.getSchool() == null) throw new Exception("the student don't have a school");
+      if (auxSt.getSchool() == null) throw new MyException("the student don't have a school");
       else {
          School auxSch = schoolRepository.getById(idSch);
          auxSch.getStudentList().remove(studentService.getStudent(idSt));
@@ -101,9 +102,9 @@ public class SchoolService {
    }
 
    @Transactional
-   public School deleteProfessor(String idpr, String idSch) throws Exception {
+   public School deleteProfessor(String idpr, String idSch) throws MyException {
       Professor auxPr = professorService.getProfessor(idpr);
-      if (auxPr.getSchool() == null) throw new Exception("the professor don't have a school");
+      if (auxPr.getSchool() == null) throw new MyException("the professor don't have a school");
       else {
          School auxSch = schoolRepository.getById(idSch);
          auxSch.getProfessorList().remove(auxPr);
