@@ -21,9 +21,7 @@ public class ProfessorController {
 
    @GetMapping(path = "/get-pro/{id}")
    public ResponseEntity<ProfessorDTO> getProf(@PathVariable("id") String id) throws Exception {
-      return ResponseEntity
-         .status(HttpStatus.OK)
-         .body(professorService.getProfessor(id));
+      return ResponseEntity.ok(professorService.getProfessor(id));
    }
 
    @GetMapping(path = "/get-all-professor")
@@ -43,16 +41,14 @@ public class ProfessorController {
 
    @PutMapping(path = "put-professor/{id}")
    public ResponseEntity<ProfessorDTO> putProfessor(@RequestBody Professor aux, @PathVariable("id") String id) {
-      return ResponseEntity
-         .status(HttpStatus.CREATED)
-         .body(professorService.putProfessor(aux,id));
+      return ResponseEntity.ok(professorService.putProfessor(aux,id));
    }
 
    //=================Deletes=================//
 
    @DeleteMapping(path = "/delete-professor/{id}")
-   public ResponseEntity<HttpStatus> deleteProfessor(@PathVariable("id") String id) {
+   public ResponseEntity<Void> deleteProfessor(@PathVariable("id") String id) {
       professorService.deleteProfessor(id);
-      return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
    }
 }

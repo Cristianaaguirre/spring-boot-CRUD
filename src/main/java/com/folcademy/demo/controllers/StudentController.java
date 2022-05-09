@@ -34,20 +34,17 @@ public class StudentController {
    //=================Post=================//
    @PostMapping(path = "/post-student")
    public ResponseEntity<StudentDTO> postStudent(@RequestBody Student aux) throws Exception {
-      return ResponseEntity.ok(studentService.postStudent(aux));
+      return ResponseEntity.status(HttpStatus.CREATED).body(studentService.postStudent(aux));
    }
-
-
    //=================Puts y Patches=================//
    @PutMapping(path = "/put-student/{id}")
    public ResponseEntity<StudentDTO> putStudent(@RequestBody Student student, @PathVariable("id") String id) throws Exception {
       return ResponseEntity.ok(studentService.putStudent(student, id));
    }
-
    //=================Delete=================//
    @DeleteMapping(path = "/delete-student/{id}")
-   public ResponseEntity<HttpStatus> deleteStudent(@PathVariable("id") String auxId) throws Exception {
+   public ResponseEntity<Void> deleteStudent(@PathVariable("id") String auxId) throws Exception {
       studentService.deleteStudent(auxId);
-      return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
    }
 }
