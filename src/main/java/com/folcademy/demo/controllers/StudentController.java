@@ -1,8 +1,11 @@
 package com.folcademy.demo.controllers;
 
+import com.folcademy.demo.DTOs.StudentDTO;
 import com.folcademy.demo.models.Student;
 import com.folcademy.demo.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,45 +17,37 @@ public class StudentController {
    @Autowired
    private StudentService studentService;
 
-
    //=================Gets=================//
-
    @GetMapping(path = "/get-all-student")
-   public List<Student> getAllStudents() {
-      return studentService.getStudents();
+   public ResponseEntity<List<StudentDTO>> getAllStudents() {
+      return ResponseEntity.ok(studentService.getStudents());
    }
-
    @GetMapping(path = "/get-student/{id}")
-   public Student getStudent(@PathVariable ("id") String auxId) throws Exception {
-      return studentService.getStudent(auxId);
+   public ResponseEntity<StudentDTO> getStudent(@PathVariable ("id") String auxId) throws Exception {
+      return ResponseEntity.ok(studentService.getStudent(auxId));
    }
    @GetMapping("/get-by-email-student/{email}")
-   public Student getByEmail(@PathVariable("email") String auxEmail) throws Exception {
-      return studentService.getByEmail(auxEmail);
+   public ResponseEntity<StudentDTO> getByEmail(@PathVariable("email") String auxEmail) throws Exception {
+      return ResponseEntity.ok(studentService.getByEmail(auxEmail));
    }
 
    //=================Post=================//
-
-
    @PostMapping(path = "/post-student")
-   public void postStudent(@RequestBody Student aux) throws Exception {
-      studentService.postStudent(aux);
+   public ResponseEntity<StudentDTO> postStudent(@RequestBody Student aux) throws Exception {
+      return ResponseEntity.ok(studentService.postStudent(aux));
    }
 
 
    //=================Puts y Patches=================//
-
    @PutMapping(path = "/put-student/{id}")
-   public void putStudent(@RequestBody Student student, @PathVariable("id") String id) throws Exception {
-      studentService.putStudent(student, id);
+   public ResponseEntity<StudentDTO> putStudent(@RequestBody Student student, @PathVariable("id") String id) throws Exception {
+      return ResponseEntity.ok(studentService.putStudent(student, id));
    }
 
-
    //=================Delete=================//
-
-   //By personal Query
    @DeleteMapping(path = "/delete-student/{id}")
-   public void deleteStudent(@PathVariable("id") String auxId) throws Exception {
+   public ResponseEntity<HttpStatus> deleteStudent(@PathVariable("id") String auxId) throws Exception {
       studentService.deleteStudent(auxId);
+      return ResponseEntity.ok(HttpStatus.NO_CONTENT);
    }
 }
