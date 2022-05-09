@@ -1,6 +1,7 @@
 package com.folcademy.demo.controllers;
 
 import com.folcademy.demo.DTOs.StudentDTO;
+import com.folcademy.demo.exceptions.MyException;
 import com.folcademy.demo.models.Student;
 import com.folcademy.demo.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +28,18 @@ public class StudentController {
       return ResponseEntity.ok(studentService.getStudent(auxId));
    }
    @GetMapping("/get-by-email-student/{email}")
-   public ResponseEntity<StudentDTO> getByEmail(@PathVariable("email") String auxEmail) throws Exception {
+   public ResponseEntity<StudentDTO> getByEmail(@PathVariable("email") String auxEmail){
       return ResponseEntity.ok(studentService.getByEmail(auxEmail));
    }
 
    //=================Post=================//
    @PostMapping(path = "/post-student")
-   public ResponseEntity<StudentDTO> postStudent(@RequestBody Student aux) throws Exception {
+   public ResponseEntity<StudentDTO> postStudent(@RequestBody Student aux) throws MyException {
       return ResponseEntity.status(HttpStatus.CREATED).body(studentService.postStudent(aux));
    }
    //=================Puts y Patches=================//
    @PutMapping(path = "/put-student/{id}")
-   public ResponseEntity<StudentDTO> putStudent(@RequestBody Student student, @PathVariable("id") String id) throws Exception {
+   public ResponseEntity<StudentDTO> putStudent(@RequestBody Student student, @PathVariable("id") String id) throws MyException {
       return ResponseEntity.ok(studentService.putStudent(student, id));
    }
    //=================Delete=================//
