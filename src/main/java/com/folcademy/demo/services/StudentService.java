@@ -1,10 +1,9 @@
 package com.folcademy.demo.services;
 
-import com.folcademy.demo.DTOs.StudentDTO;
-import com.folcademy.demo.exceptions.MyException;
+import com.folcademy.demo.models.DTOs.StudentDTO;
 import com.folcademy.demo.exceptions.ResourceNotFoundException;
-import com.folcademy.demo.models.Student;
-import com.folcademy.demo.repositories.StudentRepository;
+import com.folcademy.demo.models.entities.Student;
+import com.folcademy.demo.models.repositories.StudentRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,36 +20,30 @@ public class StudentService {
 
    //=================Gets=================//
    @Transactional
-   public @NotNull StudentDTO getStudent(String id){
-      Student aux = studentRepository
+   public @NotNull Student getStudent(String id){
+      return studentRepository
          .findById(id)
          .orElseThrow(() -> new ResourceNotFoundException(id, "student"));
-      return toDTO(aux);
    }
    @Transactional
-   public StudentDTO getByEmail(String email){
-      Student aux = studentRepository
+   public Student getByEmail(String email){
+      return studentRepository
          .getByEmail(email)
          .orElseThrow(() -> new ResourceNotFoundException("DON'T FOUND"));
-      return toDTO(aux);
+
    }
    @Transactional
-   public List<StudentDTO> getStudents() {
-      return studentRepository
-         .findAll()
-         .stream()
-         .map(this::toDTO)
-         .collect(Collectors.toList());
+   public List<Student> getStudents() {
+      return studentRepository.findAll();
    }
    //=================Post=================//
    @Transactional
-   public StudentDTO postStudent(Student aux) throws MyException {
-      if(aux == null) throw new MyException("OBJECT NULL");
-      return toDTO(studentRepository.save(aux));
+   public Student postStudent(@NotNull Student aux){
+      return studentRepository.save(aux);
    }
    //=================Puts y patches=================//
    @Transactional
-   public StudentDTO putStudent(@NotNull Student auxStudent, String auxId) throws MyException {
+   public Student putStudent(@NotNull Student auxStudent, String auxId){
       Student student = studentRepository.getById(auxId);
       student.setName(auxStudent.getName());
       student.setLastName(auxStudent.getLastName());
@@ -59,16 +52,23 @@ public class StudentService {
    }
    //=================Deletes=================//
    @Transactional
-   public void deleteStudent(@NotNull String id) throws MyException {
-      if(id.trim().isEmpty()) throw new MyException("INVALID STRING");
+   public void deleteStudent(@NotNull String id){
       studentRepository.deleteById(id);
    }
-   private StudentDTO toDTO(@NotNull Student aux) {
+
+   //=================DTOs method=================//
+   public StudentDTO toDTO(@NotNull Student aux) {
       return StudentDTO.builder()
          .id(aux.getId())
          .name(aux.getName())
          .lastName(aux.getLastName())
          .email(aux.getEmail())
          .build();
+   }
+   public List<StudentDTO> listToDTO(@NotNull List<Student> list) {
+      return list
+         .stream()
+         .map(this::toDTO)
+         .collect(Collectors.toList());
    }
 }

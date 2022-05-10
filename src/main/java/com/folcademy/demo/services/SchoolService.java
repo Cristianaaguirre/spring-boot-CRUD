@@ -1,13 +1,14 @@
 package com.folcademy.demo.services;
 
+import com.folcademy.demo.models.DTOs.SchoolDTO;
 import com.folcademy.demo.exceptions.MyException;
-import com.folcademy.demo.models.Professor;
-import com.folcademy.demo.models.School;
-import com.folcademy.demo.models.Student;
-import com.folcademy.demo.repositories.ProfessorRepository;
-import com.folcademy.demo.repositories.SchoolRepository;
+import com.folcademy.demo.models.entities.Professor;
+import com.folcademy.demo.models.entities.School;
+import com.folcademy.demo.models.entities.Student;
+import com.folcademy.demo.models.repositories.ProfessorRepository;
+import com.folcademy.demo.models.repositories.SchoolRepository;
 import com.folcademy.demo.exceptions.ResourceNotFoundException;
-import com.folcademy.demo.repositories.StudentRepository;
+import com.folcademy.demo.models.repositories.StudentRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SchoolService {
@@ -27,26 +29,22 @@ public class SchoolService {
    private ProfessorRepository professorRepository;
 
    //=================Gets=================//
-
    @Transactional
    public @NotNull School getSchool(String idSchool){
       return schoolRepository
          .findById(idSchool)
          .orElseThrow(() -> new ResourceNotFoundException("School", idSchool));
    }
-
    @Transactional
-   public List<School> getAllSubject() {
+   public List<School> getAllSchool() {
       return schoolRepository.findAll();
    }
 
    //=================Post=================//
-
    @Transactional
    public School postSchool(@RequestBody @NotNull School auxSchool) {
       return schoolRepository.save(auxSchool);
    }
-
 
    //=================Put y Patch=================//
    @Transactional
@@ -56,7 +54,6 @@ public class SchoolService {
       school.setAddress(auxSch.getAddress());
       return postSchool(school);
    }
-
    @Transactional
    public School addStudent(@NotNull String idSt, @NotNull String idSch) throws MyException {
       Student auxSt = studentRepository.getById(idSt);
@@ -69,7 +66,6 @@ public class SchoolService {
          return postSchool(auxSch);
       }
    }
-
    @Transactional
    public School addProfessor(@NotNull String idPr, @NotNull String idSch) throws MyException {
       Professor auxPro = professorRepository.getById(idPr);
@@ -82,9 +78,7 @@ public class SchoolService {
          return postSchool(auxSch);
       }
    }
-
    //=================Delete=================//
-
    @Transactional
    public void deleteSchool(String idSchool) {
       schoolRepository.deleteById(idSchool);
@@ -101,7 +95,6 @@ public class SchoolService {
          studentRepository.save(auxSt);
       }
    }
-
    @Transactional
    public void deleteProfessor(String idpr, String idSch) throws MyException {
       Professor auxPr = professorRepository.getById(idpr);
@@ -112,5 +105,19 @@ public class SchoolService {
          auxPr.setSchool(null);
          professorRepository.save(auxPr);
       }
+   }
+   //=================DTOs method=================//
+   public SchoolDTO toDTO(School aux) {
+      return SchoolDTO.builder()
+         .id(aux.getId())
+         .name(aux.getName())
+         .address(aux.getAddress())
+         .build();
+   }
+   public List<SchoolDTO> listToDTO(List<School> list) {
+      return list
+         .stream()
+         .map(this::toDTO)
+         .collect(Collectors.toList());
    }
 }

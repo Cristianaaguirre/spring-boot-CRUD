@@ -1,10 +1,10 @@
 package com.folcademy.demo.services;
 
 
-import com.folcademy.demo.DTOs.ProfessorDTO;
+import com.folcademy.demo.models.DTOs.ProfessorDTO;
 import com.folcademy.demo.exceptions.ResourceNotFoundException;
-import com.folcademy.demo.models.Professor;
-import com.folcademy.demo.repositories.ProfessorRepository;
+import com.folcademy.demo.models.entities.Professor;
+import com.folcademy.demo.models.repositories.ProfessorRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,32 +23,26 @@ public class ProfessorService {
 
    //=================Gets=================//
 
-   public @NotNull ProfessorDTO getProfessor(String id){
-      Professor aux =
-         professorRepository
+   public @NotNull Professor getProfessor(String id){
+      return professorRepository
          .findById(id)
          .orElseThrow(() -> new ResourceNotFoundException(id, "professor"));
-      return toDTO(aux);
    }
 
-   public List<ProfessorDTO> getAllProfessors(){
-      return professorRepository
-         .findAll()
-         .stream()
-         .map(this::toDTO)
-         .collect(Collectors.toList());
+   public List<Professor> getAllProfessors(){
+      return professorRepository.findAll();
    }
 
    //=================Post=================//
    @Transactional
-   public ProfessorDTO postProfessor(@NotNull @RequestBody Professor auxPro) {
-      return toDTO(professorRepository.save(auxPro));
+   public Professor postProfessor(@NotNull @RequestBody Professor auxPro) {
+      return professorRepository.save(auxPro);
    }
 
    //=================Puts y Patches=================//
 
    @Transactional
-   public ProfessorDTO putProfessor(@NotNull Professor aux, String id) {
+   public Professor putProfessor(@NotNull Professor aux, String id) {
       Professor auxPro = professorRepository.getById(id);
       auxPro.setName(aux.getName());
       auxPro.setLastName(aux.getLastName());
@@ -56,16 +50,25 @@ public class ProfessorService {
    }
 
    //=================Deletes=================//
-
    @Transactional
    public void deleteProfessor(@NotNull String id) {
       professorRepository.deleteById(id);
    }
-   private ProfessorDTO toDTO(@NotNull Professor aux) {
-         return ProfessorDTO.builder()
+
+   //=================DTOs=================//
+   public ProfessorDTO toDTO(@NotNull Professor aux) {
+      return
+         ProfessorDTO.builder()
             .id(aux.getId())
             .name(aux.getName())
             .lastName(aux.getLastName())
             .build();
    }
+   public List<ProfessorDTO> listToDTO(@NotNull List<Professor> list){
+      return list
+         .stream()
+         .map(this::toDTO)
+         .collect(Collectors.toList());
+   }
+
 }
