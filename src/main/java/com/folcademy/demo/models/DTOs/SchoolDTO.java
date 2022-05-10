@@ -1,4 +1,4 @@
-package com.folcademy.demo.DTOs;
+package com.folcademy.demo.models.DTOs;
 
 import lombok.*;
 
