@@ -1,6 +1,6 @@
-package com.folcademy.demo.repositories;
+package com.folcademy.demo.models.repositories;
 
-import com.folcademy.demo.models.Professor;
+import com.folcademy.demo.models.entities.Professor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -23,5 +23,6 @@ public class School {
    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private List<Student> studentList;
    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   @Column(name = "school_professor_list")
    private List<Professor> professorList;
 }

@@ -1,7 +1,7 @@
 package com.folcademy.demo.controllers;
 
-import com.folcademy.demo.DTOs.ProfessorDTO;
-import com.folcademy.demo.models.Professor;
+import com.folcademy.demo.models.DTOs.ProfessorDTO;
+import com.folcademy.demo.models.entities.Professor;
 import com.folcademy.demo.services.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +20,13 @@ public class ProfessorController {
    //=================Gets=================//
 
    @GetMapping(path = "/get-pro/{id}")
-   public ResponseEntity<ProfessorDTO> getProf(@PathVariable("id") String id) throws Exception {
-      return ResponseEntity.ok(professorService.getProfessor(id));
+   public ResponseEntity<ProfessorDTO> getProf(@PathVariable("id") String id){
+      return ResponseEntity.ok(professorService.toDTO(professorService.getProfessor(id)));
    }
 
    @GetMapping(path = "/get-all-professor")
    public ResponseEntity<List<ProfessorDTO>> getAllPro(){
-      return ResponseEntity.ok(professorService.getAllProfessors());
+      return ResponseEntity.ok(professorService.listToDTO(professorService.getAllProfessors()));
    }
    //=================Post=================//
 
@@ -34,14 +34,14 @@ public class ProfessorController {
    public ResponseEntity<ProfessorDTO> postPro(@RequestBody Professor aux) {
       return ResponseEntity
          .status(HttpStatus.CREATED)
-         .body(professorService.postProfessor(aux));
+         .body(professorService.toDTO(professorService.postProfessor(aux)));
    }
 
    //=================Puts y Patches=================//
 
    @PutMapping(path = "put-professor/{id}")
    public ResponseEntity<ProfessorDTO> putProfessor(@RequestBody Professor aux, @PathVariable("id") String id) {
-      return ResponseEntity.ok(professorService.putProfessor(aux,id));
+      return ResponseEntity.ok(professorService.toDTO(professorService.putProfessor(aux,id)));
    }
 
    //=================Deletes=================//
