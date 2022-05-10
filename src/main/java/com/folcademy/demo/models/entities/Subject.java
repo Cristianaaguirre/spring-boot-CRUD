@@ -1,4 +1,4 @@
-package com.folcademy.demo.models;
+package com.folcademy.demo.models.entities;
 
 import lombok.*;
 
@@ -17,6 +17,6 @@ public class Subject {
    private String name;
    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Professor professor;
-   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private List<Student> student;
 }

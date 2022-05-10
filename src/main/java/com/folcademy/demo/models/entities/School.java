@@ -1,4 +1,4 @@
-package com.folcademy.demo.models;
+package com.folcademy.demo.models.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
