@@ -9,8 +9,8 @@ import com.folcademy.demo.models.entities.Subject;
 import com.folcademy.demo.services.ProfessorService;
 import com.folcademy.demo.services.StudentService;
 import com.folcademy.demo.services.SubjectService;
+import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +20,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/subject")
+@AllArgsConstructor
 public class SubjectController {
 
-   @Autowired
    private SubjectService subjectService;
-   @Autowired
    private StudentService studentService;
-   @Autowired
    private ProfessorService professorService;
 
    //=================Gets=================//
@@ -36,7 +34,7 @@ public class SubjectController {
    }
 
    @GetMapping(path = "/get-all")
-   public ResponseEntity<List<SubjectDTO>> getAllSubject() {
+   public ResponseEntity<List<SubjectDTO>> getAllSubject() throws MyException {
       return ResponseEntity.ok(listSubjectToDTO(subjectService.getAllSubject()));
    }
 
@@ -61,12 +59,18 @@ public class SubjectController {
       return ResponseEntity.ok(subjectToDTO(subjectService.putSubject(aux,id)));
    }
 
-   @PatchMapping(path = "/set-professor/subject-{id-sb}/professor-{id-pr}")
-   public ResponseEntity<SubjectProfessorDTO> setProfessor(@PathVariable("id-sb") Long idSb, @PathVariable("id-pr") String idPr){
-      subjectService.setProfessor(idSb, idPr);
+   @PatchMapping(path = "/add-professor/subject-{id-sb}/professor-{id-pr}")
+   public ResponseEntity<SubjectProfessorDTO> addProfessor(@PathVariable("id-sb") Long idSb, @PathVariable("id-pr") String idPr) throws MyException {
+      subjectService.addProfessor(idSb, idPr);
       return ResponseEntity.ok(
          getProfessorSubject(subjectService.getSubject(idSb), professorService.getProfessor(idPr))
       );
+   }
+
+   @PatchMapping(path = "/set-professor/subject-{id-sb}/professor-{id-pr}")
+   public ResponseEntity<Void> removeProfessor(@PathVariable("id-sb") Long idSb, @PathVariable("id-pr") String idPr) throws MyException {
+      subjectService.removeProfessor(idSb, idPr);
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
    }
 
    @PatchMapping(path = "/add-student/subject-{id-sb}/student-{id-st}")
@@ -84,6 +88,7 @@ public class SubjectController {
    }
 
    //=================Delete=================//
+
    @DeleteMapping(path = "/delete-subject/{id}")
    public ResponseEntity<Void> deleteSubject(@PathVariable("id") Long id) {
       subjectService.deleteSubject(id);
