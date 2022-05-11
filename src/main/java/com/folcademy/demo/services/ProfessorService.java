@@ -1,12 +1,12 @@
 package com.folcademy.demo.services;
 
 
-import com.folcademy.demo.models.DTOs.ProfessorDTO;
 import com.folcademy.demo.exceptions.ResourceNotFoundException;
+import com.folcademy.demo.models.DTOs.ProfessorDTO;
 import com.folcademy.demo.models.entities.Professor;
 import com.folcademy.demo.models.repositories.ProfessorRepository;
+import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -15,10 +15,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Service
+@Service @AllArgsConstructor
 public class ProfessorService {
 
-   @Autowired
    private ProfessorRepository professorRepository;
 
    //=================Gets=================//
