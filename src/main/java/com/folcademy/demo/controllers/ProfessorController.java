@@ -3,7 +3,7 @@ package com.folcademy.demo.controllers;
 import com.folcademy.demo.models.DTOs.ProfessorDTO;
 import com.folcademy.demo.models.entities.Professor;
 import com.folcademy.demo.services.ProfessorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/professor")
+@AllArgsConstructor
 public class ProfessorController {
 
-   @Autowired
    private ProfessorService professorService;
 
    //=================Gets=================//
