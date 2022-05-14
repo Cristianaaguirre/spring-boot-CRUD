@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service @AllArgsConstructor
 public class ProfessorService {
 
@@ -61,6 +60,7 @@ public class ProfessorService {
             .id(aux.getId())
             .name(aux.getName())
             .lastName(aux.getLastName())
+            .subject(aux.getSubject())
             .build();
    }
    public List<ProfessorDTO> listToDTO(@NotNull List<Professor> list){
