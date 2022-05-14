@@ -9,4 +9,5 @@ import java.time.LocalDateTime;
 public class ExceptionReturn {
    private LocalDateTime localTime;
    private String message;
+   private String path;
 }
