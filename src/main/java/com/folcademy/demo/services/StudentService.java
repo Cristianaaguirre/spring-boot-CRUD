@@ -25,9 +25,9 @@ public class StudentService {
          .orElseThrow(() -> new ResourceNotFoundException(id, "student"));
    }
 
-   public Student getByEmail(String email){
+   public Student getByName(String name){
       return studentRepository
-         .getByEmail(email)
+         .getByName(name)
          .orElseThrow(() -> new ResourceNotFoundException("DON'T FOUND"));
 
    }
